@@ -24,7 +24,7 @@ class Creationcontroller:
             datas = []
             for creation in data:
                 creation = DefaultMunch.fromDict(creation)
-                datas.append(Creation(id=creation.id,name=creation.name, image=creation.image))
+                datas.append(Creation(id=creation.id, name=creation.name, image=creation.image))
             return datas
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -40,7 +40,7 @@ class Creationcontroller:
             data = response.json()
             print(data)
             data = DefaultMunch.fromDict(data)
-            creation = Creation(id=data.id, image=data.image)
+            creation = Creation(id=data.id, image=data.image,name=data.name)
             return creation
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))

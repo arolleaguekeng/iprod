@@ -39,10 +39,12 @@ frame.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 l2 = customtkinter.CTkLabel(master=frame, text="Log into your Account", font=('Century Gothic', 20))
 l2.place(x=50, y=45)
 
-entry1 = customtkinter.CTkEntry(master=frame, width=220, placeholder_text='Username')
+tv_username = tkinter.StringVar(app, value='admin')
+
+entry1 = customtkinter.CTkEntry(master=frame, width=220, placeholder_text='Username',textvariable=tv_username)
 entry1.place(x=50, y=110)
 
-entry2 = customtkinter.CTkEntry(master=frame, width=220, placeholder_text='Password', show="*")
+entry2 = customtkinter.CTkEntry(master=frame, width=220, placeholder_text='Password', show="*",textvariable=tv_username)
 entry2.place(x=50, y=165)
 
 l3 = customtkinter.CTkLabel(master=frame, text="Forget password?", font=('Century Gothic', 12))

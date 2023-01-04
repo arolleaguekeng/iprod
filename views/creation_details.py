@@ -9,15 +9,35 @@ import PIL as p
 
 from controllers.creation_controller import Creationcontroller
 from models.creations import Creation
+from views.creation_edit import CreationEdit
+
 
 
 class CreationDetails(customtkinter.CTkFrame):
-    def __init__(self,creation: Creation,master):
+    def __init__(self, creation: Creation, master, app):
         super().__init__(master=master)
-        l1 = customtkinter.CTkLabel(master=self, text=creation.name, font=('Century Gothic', 60))
-        l1.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+        self.app = app
+        self.creation = creation
+        self.image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../static/images")
+        self.creation_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(self.image_path,
+                                                                                         creation.image)),
+                                                     size=(400, 400))
+        self.lb_creation_image = customtkinter.CTkLabel(self, text=creation.name+'\n'+'test',
+                                                        image=self.creation_image,
+                                                        compound="left",
+                                                        font=customtkinter.CTkFont(size=20,
+                                                                                   weight="bold",
+                                                                                   family='Century Gothic'))
+        self.lb_creation_image.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
-
+        # Create custom button
+        self.button1 = customtkinter.CTkButton(master=self, width=220, text="Login",
+                                          corner_radius=6,command=self.open_edit_page)
+        self.button1.place(x=50, y=240)
+    def open_edit_page(self):
+        self.app.creation_edit = CreationEdit(creation=self.creation, master=self.app)
+        self.app.detail_is_open = True
+        self.app.select_frame_by_name("creation_edit")
 if __name__ == "__main__":
     app = CreationDetails()
     app.mainloop()
