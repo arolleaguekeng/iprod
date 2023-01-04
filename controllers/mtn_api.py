@@ -5,10 +5,6 @@ import json
 import requests
 import sys
 
-phone = sys.argv[1]
-amound = sys.argv[2]
-
-
 
 content_type = 'application/json'
 x_reference_id = '80d310f2-fe7d-4f3c-9e3a-184b49a29935'
@@ -126,10 +122,10 @@ def requesttopay(
 
     try:
         response = requests.post("https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay?",headers = headers, data=json.dumps(body))
-        return response.content
+        return response.json()
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
 
-print(requesttopay(content_type, x_reference_id, ocp_Apim_subscription_Key, x_target_environment,amount=amound,phone_number=phone))
+print(requesttopay(content_type, x_reference_id, ocp_Apim_subscription_Key, x_target_environment,amount="1000",phone_number="677656644"))
  

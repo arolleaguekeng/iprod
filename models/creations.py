@@ -1,5 +1,6 @@
 class Creation:
-    def __init__(self,name,image):
+    def __init__(self,id,name,image):
+        self.id = id
         self.name = name
         self.image = image
 
