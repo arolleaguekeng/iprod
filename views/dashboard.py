@@ -127,27 +127,27 @@ class App(customtkinter.CTk):
         colum = 0
         for i in range(0, len(self.creation_list)):
             print(i)
-            lf_grocery1 = customtkinter.CTkFrame(master=self.second_frame, width=500, )
+            lf_grocery1 = customtkinter.CTkFrame(master=self.second_frame,width=999, height=500 )
             lf_grocery1.grid(row=row,
                              column=colum,
-                             padx=20,
-                             pady=20,
-                             ipadx=100,
-                             ipady=20)
+                             padx=(20, 20),
+                             pady=(20, 20),
+                             ipadx=20,
+                             ipady=20,)
             colum += 1
-            if colum is 3:
+            if colum is 5:
                 row += 1
                 colum = 0
 
             grocery1_image = ptk.PhotoImage(p.Image.open("static/Images\{}".format(self.creation_list[i].image)))
             label_grocery_1 = customtkinter.CTkLabel(lf_grocery1,
-                                                     image=grocery1_image).grid(row=0, column=1)
+                                                     image=grocery1_image, anchor='n').grid(row=0, column=0)
             name_grocery1 = customtkinter.CTkLabel(lf_grocery1,
-                                                   text=self.creation_list[i].name).grid(row=1, column=1)
+                                                   text=self.creation_list[i].name).grid(row=1, column=0)
             label_qty_grocery1 = customtkinter.CTkLabel(lf_grocery1,
-                                                        text="Qty:").grid(row=2, column=1)
+                                                        text="Qty:", anchor='center').grid(row=2, column=0)
             add_grocery1 = customtkinter.CTkButton(lf_grocery1,
-                                                   text="Ajouter au panier",
+                                                   text="Ajouter au panier", anchor='s',
                                                    command=lambda i=i: self.get_current_creation(i)).grid(row=3,
                                                                                                           column=0)
         # create third frame
@@ -160,7 +160,7 @@ class App(customtkinter.CTk):
 
         print(self.creation_list[index].name)
         responce = self.controller.get_by_id(self.creation_list[index].id)
-        self.creation = CreationDetails(creation=responce, master=self,app=self)
+        self.creation = CreationDetails(creation=responce, master=self, app=self)
         self.is_detail = True
         self.select_frame_by_name('creation_details')
 

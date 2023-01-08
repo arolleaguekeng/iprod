@@ -13,7 +13,7 @@ class PostUser(APIView):
 
 # region POST methods
 @api_view(['POST'])
-def userCreate(request):
+def user_create(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -22,7 +22,7 @@ def userCreate(request):
 
 # POST creation in server
 @api_view(['POST'])
-def creationCreate(request):
+def creation_create(request):
     serializer = CreationSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -33,14 +33,14 @@ def creationCreate(request):
 
 # Get one user By Id.
 @api_view(['GET'])
-def userDetail(request, pk):
+def user_detail(request, pk):
     tasks = User.objects.get(id=pk)
     serializer = UserSerializer(tasks, many=False)
     return Response(serializer.data)
 
 # Get one creation By Id.
 @api_view(['GET'])
-def creationDetail(request, pk):
+def creation_detail(request, pk):
     tasks = Creation.objects.get(id=pk)
     serializer = CreationSerializer(tasks, many=False)
     return Response(serializer.data)
@@ -48,17 +48,27 @@ def creationDetail(request, pk):
 
 # Get All users from server.
 @api_view(['GET'])
-def userList(request):
+def user_list(request):
     tasks = User.objects.all().order_by('-id')
     serializer = UserSerializer(tasks, many=True)
     return Response(serializer.data)
 
 # Get All Creations from server.
 @api_view(['GET'])
-def creationList(request):
+def creation_list(request):
     tasks = Creation.objects.all().order_by('-id')
     serializer = CreationSerializer(tasks, many=True)
     return Response(serializer.data)
 
 
-# Create your views here.
+# region put
+
+@api_view(['PUT'])
+def creation_edit(request,pk):
+    creation = Creation.objects.get(pk=pk)
+    serializer = CreationSerializer(creation, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# end region
