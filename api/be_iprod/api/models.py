@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+
+
 # Create your models here.
 class User(models.Model):
     name = models.CharField(max_length=100, null=False)
@@ -13,10 +15,10 @@ class User(models.Model):
 
 class Creation(models.Model):
     name = models.CharField(max_length=100, null=False, default="default")
-    image = models.CharField(max_length=100, null=False, default="default")
+    image = models.TextField(null=False)
     descriptions = models.CharField(max_length=100, null=False, default="default")
     amound = models.FloatField(null=False,default=0)
-    created_at = models.DateTimeField(default=timezone.now(), null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
     class Meta:

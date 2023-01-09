@@ -72,3 +72,12 @@ def creation_edit(request,pk):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 # end region
+
+
+
+@api_view(['DELETE'])
+def creation_delete(request,pk):
+    creation = Creation.objects.get(pk=pk)
+    creation.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+

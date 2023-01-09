@@ -74,5 +74,14 @@ class Creationcontroller:
                                     headers=headers,
                                     data=json.dumps(body))
             print('{}|{}'.format(response.status_code, response.json()))
+            return response.status_code
+        except Exception as e:
+            print("{}".format(e))
+
+    def delete_creation(self, id):
+        try:
+            response = requests.delete("http://127.0.0.1:8000/api/delete-creation/{}/".format(id))
+            print('{}|{}'.format(response.status_code, response.json()))
+            return response.status_code
         except Exception as e:
             print("{}".format(e))

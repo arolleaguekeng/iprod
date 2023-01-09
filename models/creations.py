@@ -1,5 +1,8 @@
+import base64
+
+
 class Creation:
-    def __init__(self, id, name, image, description, amound, created_at):
+    def __init__(self, id, name, image:bytes, description, amound, created_at):
         self.id = id
         self.name = name
         self.image = image
