@@ -35,14 +35,15 @@ class CreationDetails(customtkinter.CTkFrame):
 
         # Create custom button
         self.btn_edit = customtkinter.CTkButton(master=self.f_container, width=220, text="Modifier",
-                                               corner_radius=6, command=self.open_edit_page)
+                                                corner_radius=6,
+                                                command=lambda i=self.creation: self.open_edit_page(self.creation))
         self.btn_edit.grid(row=4, column=0)
 
         self.btn_delete = customtkinter.CTkButton(master=self.f_container,
                                                   width=220, text="Supprimer",
-                                               corner_radius=6,
+                                                  corner_radius=6,
                                                   fg_color='red',
-                                                command=self.delete_creation)
+                                                  command=self.delete_creation)
         self.btn_delete.grid(row=4, column=1)
 
         self.lb_description = customtkinter.CTkLabel(self.f_container,
@@ -52,20 +53,20 @@ class CreationDetails(customtkinter.CTkFrame):
 
         self.lb_description.grid(row=1, column=0)
 
-        self.lb_description = customtkinter.CTkLabel(self.f_container, text=str(creation.amound)+' XAF',
+        self.lb_description = customtkinter.CTkLabel(self.f_container, text=str(creation.amound) + ' XAF',
                                                      font=customtkinter.CTkFont(size=15,
                                                                                 family='Century Gothic'))
 
         self.lb_description.grid(row=2, column=0)
 
         self.lb_created_at = customtkinter.CTkLabel(self.f_container, text=creation.created_at,
-                                                     font=customtkinter.CTkFont(size=15,
-                                                                                family='Century Gothic'))
+                                                    font=customtkinter.CTkFont(size=15,
+                                                                               family='Century Gothic'))
 
         self.lb_created_at.grid(row=3, column=0)
 
-    def open_edit_page(self):
-        self.app.creation_edit = CreationEdit(creation=self.creation, master=self.app)
+    def open_edit_page(self, creation):
+        self.app.creation_edit = CreationEdit(creation=creation, master=self.app)
         self.app.detail_is_open = True
         self.app.select_frame_by_name("creation_edit")
 
@@ -77,7 +78,6 @@ class CreationDetails(customtkinter.CTkFrame):
             status = controller.delete_creation(self.creation.id)
             if status is 204:
                 messagebox.showinfo("Message", "Suppréssion éffectuée avec succès")
-
 
 
 if __name__ == "__main__":

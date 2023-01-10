@@ -11,18 +11,23 @@ import PIL as p
 
 from controllers.creation_controller import Creationcontroller
 from controllers.mtn_api import PaiementMoMo
+from models.creations import Creation
+from views.creation_add import CreationAdd
 from views.creation_details import CreationDetails
+from views.creation_edit import CreationEdit
 
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        self.creation_edit = None
         self.creation_list = []
         self.title("I-Prod")
         self.geometry("700x450")
         self.is_detail = False
         self.detail_is_open = False
+        self.add_is_open = False
         # set grid layout 1x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -132,10 +137,17 @@ class App(customtkinter.CTk):
         # select default frame
         self.select_frame_by_name("home")
 
+        btn_add_creation = customtkinter.CTkButton(self,
+                                                   command=lambda i=2: self.open_add_page(Creation()),
+                                                   text="Ajouter")
+        btn_add_creation.grid(column=2, row=0, sticky=SW, pady=20)
+
+
+
     def get_all_creations(self):
         self.creation_list.clear()
         self.creation_list = self.controller.get_all()
-        row = 0
+        row = 1
         colum = 0
         for i in range(0, len(self.creation_list)):
             print(i)
@@ -149,23 +161,23 @@ class App(customtkinter.CTk):
             if colum is 5:
                 row += 1
                 colum = 0
-            print(self.creation_list[i].image)
+
+            current_creation = self.creation_list[i]
+            print(current_creation)
             # self.image_path = ptk.PhotoImage(p.Image.open("static/Images\{}".format(self.creation_list[i].image)))
             self.image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../static/images")
-            self.creation_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(self.image_path,
-                                                                                             self.creation_list[
-                                                                                                 i].image)),
+            self.creation_image = customtkinter.CTkImage(light_image=Image.open(current_creation.image),
                                                          size=(260, 300))
-            self.lb_creation_image = customtkinter.CTkLabel(lf_grocery1, text=self.creation_list[i].name,
+            self.lb_creation_image = customtkinter.CTkLabel(lf_grocery1, text=current_creation.name,
                                                             image=self.creation_image,
                                                             compound="top",
                                                             font=customtkinter.CTkFont(size=20,
                                                                                        family='Century Gothic'))
             self.lb_creation_image.grid(row=0, column=0)
             name_grocery1 = customtkinter.CTkLabel(lf_grocery1,
-                                                   text=self.creation_list[i].description).grid(row=1, column=0)
+                                                   text=current_creation.description).grid(row=1, column=0)
             label_qty_grocery1 = customtkinter.CTkLabel(lf_grocery1,
-                                                        text=str(self.creation_list[i].amound) + 'XAF',
+                                                        text=str(current_creation.amound) + 'XAF',
                                                         anchor='center').grid(row=2, column=0)
             btn_details = customtkinter.CTkButton(lf_grocery1,
                                                   text="Détails", anchor='s',
@@ -173,10 +185,14 @@ class App(customtkinter.CTk):
                                                                                                          column=0)
             btn_buy = customtkinter.CTkButton(lf_grocery1,
                                               text="Acheter", anchor='s',
-                                              command=self.paiement_momo).grid(row=4,
-                                                                               column=0,
-                                                                               pady=10)
-
+                                              command=lambda i=i: self.popupwin(current_creation)).grid(row=4,
+                                                                                                        column=0,
+                                                                                                        pady=10)
+    def open_add_page(self, creation: Creation):
+        self.add_is_open = True
+        self.creation_add = CreationAdd(master=self)
+        self.select_frame_by_name("creation_add")
+        
     def get_current_creation(self, index):
 
         print(self.creation_list[index].name)
@@ -185,12 +201,16 @@ class App(customtkinter.CTk):
         self.is_detail = True
         self.select_frame_by_name('creation_details')
 
-    def paiement_momo(self):
-        paiement = PaiementMoMo(phone_number="44444444", amound="1000")
+    def paiement_momo(self, creation):
+        paiement = PaiementMoMo(phone_number="44444444", amound=creation.amound)
         statut = paiement.requesttopay()
         print(statut)
         if statut is not 201:
             messagebox.showinfo("Info Paiement", "Paiement éffectué avec succès")
+            self.top.destroy()
+        else:
+            messagebox.showerror("Echec", "Une erreur c'est produite lors du paiement")
+            self.top.destroy()
 
     def new_window(self, winclass):
         if self.win2_status == 0:
@@ -215,6 +235,8 @@ class App(customtkinter.CTk):
             self.home_frame.grid_forget()
         if name == "frame_2":
             self.second_frame.grid(row=0, column=1, sticky="nsew")
+            self.creation_list.clear()
+            self.get_all_creations()
         else:
             self.second_frame.grid_forget()
         if name == "frame_3":
@@ -231,18 +253,43 @@ class App(customtkinter.CTk):
                     self.creation_edit.grid(row=0, column=1, sticky="nsew")
                 else:
                     self.creation_edit.grid_forget()
-
+        if self.add_is_open is True:
+            if name == "creation_add":
+                self.creation_add.grid(row=0, column=1, sticky="nsew")
+            else:
+                self.creation_add.grid_forget()
     def home_button_event(self):
         self.select_frame_by_name("home")
 
     def frame_2_button_event(self):
         self.select_frame_by_name("frame_2")
+        self.creation_list = self.controller.get_all()
 
     def frame_3_button_event(self):
         self.select_frame_by_name("frame_3")
 
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
+
+    def popupwin(self, creation):
+        # Create a Toplevel window
+        self.top = Toplevel(self.master)
+        self.top.geometry("300x100")
+        self.top.title = "Payement par MoMo"
+
+        # Create an Entry Widget in the Toplevel window
+        entry = customtkinter.CTkEntry(self.top, width=270, placeholder_text="Entrer Votre numéro de téléphone")
+        entry.pack()
+
+        # Create a Button Widget in the Toplevel Window
+        btn_buy = customtkinter.CTkButton(self.top,
+                                          text="Payer",
+                                          command=lambda creation=creation:
+                                          self.paiement_momo(creation=creation))
+        btn_buy.pack(pady=5, side=TOP)
+
+    def close_win(self):
+        self.top.destroy()
 
 
 if __name__ == "__main__":

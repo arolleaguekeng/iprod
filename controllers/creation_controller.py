@@ -78,6 +78,29 @@ class Creationcontroller:
         except Exception as e:
             print("{}".format(e))
 
+    def add_creation(self, creation: Creation):
+        headers = {
+            # Request headers
+            'Content-Type': 'application/json',
+        }
+
+        body = {
+            "name": creation.name,
+            "image": creation.image,
+            "descriptions": creation.description,
+            "amound": creation.amound,
+            "created_at": creation.created_at
+        }
+
+        try:
+            response = requests.post("http://127.0.0.1:8000/api/post-creation/",
+                                     headers=headers,
+                                     data=json.dumps(body))
+            print('{}|{}'.format(response.status_code, response.json()))
+            return response.status_code
+        except Exception as e:
+            print("{}".format(e))
+
     def delete_creation(self, id):
         try:
             response = requests.delete("http://127.0.0.1:8000/api/delete-creation/{}/".format(id))

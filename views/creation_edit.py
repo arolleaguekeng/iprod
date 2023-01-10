@@ -31,18 +31,18 @@ class CreationEdit(customtkinter.CTkFrame):
         self.f_container.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
         lb_title = customtkinter.CTkLabel(master=self.f_container,
-                                          text="Modification d'une Création",
+                                          text= "Modification d'une Création" if self.creation.id is 0 else "Ajout d'une création",
                                           font=('Century Gothic', 30))
         lb_title.grid(row=0, column=0, padx=input_padding_x, pady=input_padding_y)
 
-
-
-        lb_name = customtkinter.CTkLabel(self.f_container, text='Nom', font=customtkinter.CTkFont(size=20,
-                                                                                       family='Century Gothic'))
+        lb_name = customtkinter.CTkLabel(self.f_container, text='Nom',
+                                         font=customtkinter.CTkFont(size=20,
+                                                                    family='Century Gothic'))
         lb_name.grid(row=1, column=0)
 
-        lb_name = customtkinter.CTkLabel(self.f_container, text='Description ', font=customtkinter.CTkFont(size=20,
-                                                                                       family='Century Gothic'))
+        lb_name = customtkinter.CTkLabel(self.f_container, text='Description ',
+                                         font=customtkinter.CTkFont(size=20,
+                                                                    family='Century Gothic'))
         lb_name.grid(row=1, column=1)
 
         et_creation_name = customtkinter.CTkEntry(master=self.f_container,
@@ -58,8 +58,9 @@ class CreationEdit(customtkinter.CTkFrame):
                                                          textvariable=self.tv_creation_description)
         et_creation_description.grid(row=2, column=1)
 
-        lb_amound = customtkinter.CTkLabel(self.f_container, text='Prix', font=customtkinter.CTkFont(size=20,
-                                                                                       family='Century Gothic'))
+        lb_amound = customtkinter.CTkLabel(self.f_container, text='Prix',
+                                           font=customtkinter.CTkFont(size=20,
+                                                                      family='Century Gothic'))
         lb_amound.grid(row=3, column=0)
 
         et_creation_amound = customtkinter.CTkEntry(master=self.f_container, width=input_width,
@@ -88,24 +89,24 @@ class CreationEdit(customtkinter.CTkFrame):
         self.creation.name = self.tv_creation_name.get()
         self.creation.description = self.tv_creation_description.get()
         self.creation.amound = float(self.tv_creation_amound.get())
+        self.creation.image = self.filename
 
         statut_code = self.controller.edit_creation(creation=self.creation)
         if statut_code is 200:
             messagebox.showinfo("showinfo", "Modification éffectuée avec succès")
-            self.destroy()
+            self.grid_forget()
 
     def upload_file(self):
         global img
         f_types = [('Jpg Files', '*.jpg')]
-        filename = filedialog.askopenfilename(filetypes=f_types)
-        print(filename)
-        img = ImageTk.PhotoImage(file=filename)
+        self.filename = filedialog.askopenfilename(filetypes=f_types)
+        print(self.filename)
+        img = ImageTk.PhotoImage(file=self.filename)
         b2 = tkinter.Button(self.f_container, image=img)  # using Button
         b2.grid(row=3, column=1)
-        print(os.popen(r'copy "{0}"  "{1}" '.format(filename, '../static/images')))
-        with open(filename, "rb") as img_file:
-            my_string = base64.b64encode(img_file.read())
-            self.creation.image = str(my_string)
+        print(os.popen(r'copy "{0}"  "{1}" '.format(self.filename, '../static/images')))
+
+
 
 if __name__ == "__main__":
     app = CreationEdit()

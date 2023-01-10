@@ -12,7 +12,7 @@ from controllers.creation_controller import Creationcontroller
 from models.creations import Creation
 
 
-class CreationEdit(customtkinter.CTkFrame):
+class CreationAdd(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master=master)
 
@@ -71,8 +71,8 @@ class CreationEdit(customtkinter.CTkFrame):
         btn_edit = customtkinter.CTkButton(master=self.f_container,
                                            width=input_width,
                                            height=input_height,
-                                           text="Modifier",
-                                           command=self.edit_creation,
+                                           text="Enregistrer",
+                                           command=self.add_creation,
                                            corner_radius=6)
         btn_edit.grid(row=5, column=1)
 
@@ -84,28 +84,29 @@ class CreationEdit(customtkinter.CTkFrame):
     def add_creation(self):
         creation = Creation()
         creation.name = self.tv_creation_name.get()
+        creation.image = self.filename
         creation.description = self.tv_creation_description.get()
         creation.amound = float(self.tv_creation_amound.get())
 
-        statut_code = self.controller.add_creation(creation=self.creation)
+        statut_code = self.controller.add_creation(creation=creation)
         if statut_code is 200:
-            messagebox.showinfo("showinfo", "Modification éffectuée avec succès")
-            self.destroy()
+            messagebox.showinfo("Info", "Ajout éffectuée avec succès")
+            self.grid_forget()
+        else:
+            messagebox.showerror("Error [{}]".format(statut_code), "Echec de L'ajout")
 
     def upload_file(self):
         global img
         f_types = [('Jpg Files', '*.jpg')]
-        filename = filedialog.askopenfilename(filetypes=f_types)
-        print(filename)
-        img = ImageTk.PhotoImage(file=filename)
+        self.filename = filedialog.askopenfilename(filetypes=f_types)
+        print(self.filename)
+        img = ImageTk.PhotoImage(file=self.filename)
         b2 = tkinter.Button(self.f_container, image=img)  # using Button
         b2.grid(row=3, column=1)
-        print(os.popen(r'copy "{0}"  "{1}" '.format(filename, '../static/images')))
-        with open(filename, "rb") as img_file:
-            my_string = base64.b64encode(img_file.read())
-            self.creation.image = str(my_string)
+        print(os.popen(r'copy "{0}"  "{1}" '.format(self.filename, '../static/images')))
+
 
 
 if __name__ == "__main__":
-    app = CreationEdit()
+    app = CreationAdd()
     app.mainloop()
