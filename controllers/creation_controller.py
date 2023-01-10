@@ -104,7 +104,7 @@ class Creationcontroller:
     def delete_creation(self, id):
         try:
             response = requests.delete("http://127.0.0.1:8000/api/delete-creation/{}/".format(id))
-            print('{}|{}'.format(response.status_code, response.json()))
+            print('statut code: {}'.format(response.status_code))
             return response.status_code
         except Exception as e:
             print("{}".format(e))

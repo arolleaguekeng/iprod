@@ -78,6 +78,7 @@ class CreationDetails(customtkinter.CTkFrame):
             status = controller.delete_creation(self.creation.id)
             if status is 204:
                 messagebox.showinfo("Message", "Suppréssion éffectuée avec succès")
+                self.grid_forget()
 
 
 if __name__ == "__main__":

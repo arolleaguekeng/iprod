@@ -22,7 +22,6 @@ class App(customtkinter.CTk):
         super().__init__()
 
         self.creation_edit = None
-        self.creation_list = []
         self.title("I-Prod")
         self.geometry("700x450")
         self.is_detail = False
@@ -125,12 +124,14 @@ class App(customtkinter.CTk):
         self.controller = Creationcontroller()
 
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        h = Scrollbar(self.second_frame, orient='horizontal')
+
         Grocery_Label = customtkinter.CTkLabel(self.second_frame,
                                                text="Liste des Créations",
                                                fg_color="transparent").grid(row=0,
                                                                             column=0,
                                                                             padx=20)
-        self.get_all_creations()
+
         # create third frame
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
@@ -145,6 +146,7 @@ class App(customtkinter.CTk):
 
 
     def get_all_creations(self):
+        self.creation_list = []
         self.creation_list.clear()
         self.creation_list = self.controller.get_all()
         row = 1
@@ -152,6 +154,7 @@ class App(customtkinter.CTk):
         for i in range(0, len(self.creation_list)):
             print(i)
             lf_grocery1 = customtkinter.CTkFrame(master=self.second_frame, width=999, height=500)
+
             lf_grocery1.grid(row=row,
                              column=colum,
                              padx=(20, 20),
@@ -235,8 +238,7 @@ class App(customtkinter.CTk):
             self.home_frame.grid_forget()
         if name == "frame_2":
             self.second_frame.grid(row=0, column=1, sticky="nsew")
-            self.creation_list.clear()
-            self.get_all_creations()
+
         else:
             self.second_frame.grid_forget()
         if name == "frame_3":
@@ -262,8 +264,9 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("home")
 
     def frame_2_button_event(self):
+        self.get_all_creations()
         self.select_frame_by_name("frame_2")
-        self.creation_list = self.controller.get_all()
+
 
     def frame_3_button_event(self):
         self.select_frame_by_name("frame_3")
