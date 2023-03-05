@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css'%}">
+</head>
+<body>
+    <div class="head">
+        <div class="nav">
+            <div class="nav-left">
+                <span>I-prod</span>
+            </div>
+            <div class="nav-right">
+                <a href="">Home</a>
+                <a href="">Créations</a>
+                <a href="/app/get-bibiographie">Bibliographie</a>
+                <a href="">chat</a>
+                <button>Contacter</button>
+            </div>
+        </div>
+        <div class="header">
+            <div class="header-left">
+            <object data="{% static 'bg.svg'%}" width="60%" height="630hvr"> </object>
+            </div>
+            <div class="container">
+                <h1>
+                    <span style="color:blue;">I-Prod</span> Artistics Programm
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <section class='creations'>
+       <h1>Le Top des Créations</h1>
+       <div class="creations-container">
+            {% for data in creations %}
+                <a href="/app/get-creation/{{ data.id }}/">
+                    <div class="creation-card">
+                    <img src="{% static 'Electronics_9.jpeg'%}" width="200px">
+                    <span> {{ data.name }}</span>
+                    <span>Description: {{ data.descriptions}}</span>
+                    <span> {{ data.amound }} XAF</span>
+                    <button>Ajouter Panier</button>
+                </div>
+                </a>
+
+            {% endfor %}
+       </div>
+    </section>
+    <footer>
+     <h1>Merci d'être passé !</h1>
+        <div class="footer-container">
+            <div class="footer-left">
+                 <span>Contactez nous</span>
+                 <span>+237 695 112 1121</span>
+                 <span>Contactez nous</span>
+                 <span>Contactez nous</span>
+            </div>
+            <div class="footer-right">
+                 <span>Contactez nous</span>
+                 <span>+237 695 112 1121</span>
+                 <span>Contactez nous</span>
+                 <span>Contactez nous</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
+

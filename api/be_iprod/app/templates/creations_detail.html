@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css'%}">
+</head>
+<body>
+    <div class="head">
+        <div class="nav">
+            <div class="nav-left">
+                <span>I-prod</span>
+            </div>
+            <div class="nav-right">
+                <a href="">Home</a>
+                <a href="">Créations</a>
+                <a href="/app/get-bibiographie">Bibliographie</a>
+                <a href="">chat</a>
+                <button>Contacter</button>
+            </div>
+        </div>
+        <div class="dt_header">
+            <div class="dt_creations-container">
+                <div class="td_creation-card">
+                <img src="{% static 'Electronics_9.jpeg'%}" width="400px">
+                <div class="dt_information">
+                    <p> Nom de la création</p>
+                    <span> {{ creation.name }}</span>
+                    <p> Description de la création</p>
+                    <span> {{ creation.descriptions }}</span>
+                    <p> Date de création</p>
+                    <span> {{ creation.created_at }}</span>
+                    <p> Montant de la création</p>
+                    <span> {{ creation.amound }} XAF</span>
+                    <button>Ajouter Panier</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
+
